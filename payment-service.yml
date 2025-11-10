@@ -1,1 +1,17 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: payment-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart_order_db
+    username: postgres
+    password: 5656
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
