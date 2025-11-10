@@ -40,4 +40,16 @@ resilience4j:
       paymentClient:
         maxAttempts: 3
         waitDuration: 200ms
+resilience4j:
+  circuitbreaker:
+    instances:
+      place-order:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+
+  retry:
+    instances:
+      place-order:
+        maxAttempts: 3
+        waitDuration: 2s
 
