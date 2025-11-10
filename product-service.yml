@@ -9,12 +9,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/smart_order_db
     username: postgres
     password: 5656
-    driver-class-name: org.postgresql.Driver
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
+# example custom prop from config server
+product:
+  discount:
+    rate: 0.05
