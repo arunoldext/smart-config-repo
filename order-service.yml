@@ -4,52 +4,58 @@ server:
 spring:
   application:
     name: order-service
-
   datasource:
     url: jdbc:postgresql://localhost:5432/smart_order_db
     username: postgres
     password: 5656
-
-  cloud:
-    openfeign:
-      circuitbreaker:
-        enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
 
-# Resilience4j (optional, tweak as you like)
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,beans
+
 resilience4j:
   circuitbreaker:
     instances:
-      productClient:
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-      paymentClient:
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-  retry:
-    instances:
-      productClient:
-        maxAttempts: 3
-        waitDuration: 200ms
-      paymentClient:
-        maxAttempts: 3
-        waitDuration: 200ms
-resilience4j:
-  circuitbreaker:
-    instances:
-      place-order:
+      productService:
+        registerHealthIndicator: true
         slidingWindowSize: 5
+        minimumNumberOfCalls: 2
         failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 2
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+      paymentService:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 2
+        automaticTransitionFromOpenToHalfOpenEnabled: true
 
   retry:
     instances:
-      place-order:
+      productService:
         maxAttempts: 3
         waitDuration: 2s
-
+      paymentService:
+        maxAttempts: 3
+        waitDuration: 2s
